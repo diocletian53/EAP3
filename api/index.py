@@ -1,37 +1,11 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, redirect, url_for
+from process_excel import process_excels
+import io
 import os
-from process_excel import process_excel
-from github import Github
 
-app = Flask(__name__, template_folder="../templates")
+# --- Flask setup ---
+app = Flask(__name__, template_folder="../templates", static_folder="../static")
 
-# Temporary folders — only /tmp is writable on Vercel
-UPLOAD_FOLDER = "/tmp/uploads"
-OUTPUT_FOLDER = "/tmp/outputs"
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(OUTPUT_FOLDER, exist_ok=True)
-
-# ============ GitHub Release Setup ============
-GITHUB_TOKEN = os.getenv("GITHUB_PAT")  # Set in Vercel Environment Variables
-REPO_NAME = "diocletian53/EAP3"
-RELEASE_TAG = "v1.0"
-
-def get_release():
-    """Get or create a GitHub release."""
-    g = Github(GITHUB_TOKEN)
-    repo = g.get_repo(REPO_NAME)
-    try:
-        return repo.get_release(RELEASE_TAG)
-    except:
-        return repo.create_git_release(tag=RELEASE_TAG, name=RELEASE_TAG, message="Initial release")
-
-def get_github_asset_url(release, filename):
-    for asset in release.get_assets():
-        if asset.name == filename:
-            return asset.browser_download_url
-    return None
-
-# ============ Routes ============
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "POST":
@@ -39,41 +13,36 @@ def index():
         master_file = request.files.get("master_file")
 
         if not main_file or not master_file:
-            return render_template("index.html", error="Please upload both files.")
+            return render_template("index.html", error="⚠️ Please upload both files before processing.")
 
-        main_path = os.path.join(UPLOAD_FOLDER, main_file.filename)
-        master_path = os.path.join(UPLOAD_FOLDER, master_file.filename)
-        output_filename = f"Processed_{main_file.filename}"
-        output_path = os.path.join(OUTPUT_FOLDER, output_filename)
+        try:
+            # Run main processing
+            output = process_excels(main_file, master_file)
 
-        main_file.save(main_path)
-        master_file.save(master_path)
+            # Return the processed Excel file
+            return send_file(
+                output,
+                as_attachment=True,
+                download_name="Processed_Output.xlsx",
+                mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
 
-        # Process Excel
-        process_excel(main_path, master_path, output_path)
+        except Exception as e:
+            # Capture and show any processing errors
+            return render_template("index.html", error=f"❌ Processing failed: {str(e)}")
 
-        # Upload to GitHub
-        release = get_release()
-        with open(output_path, "rb") as f:
-            for asset in release.get_assets():
-                if asset.name == output_filename:
-                    asset.delete_asset()
-            release.upload_asset(output_path)
-
-        github_url = get_github_asset_url(release, output_filename)
-
-        return render_template(
-            "index.html",
-            download_file=output_filename,
-            github_message=f"✅ File uploaded to GitHub Release {RELEASE_TAG}!",
-            github_url=github_url
-        )
-
+    # Render the upload form by default
     return render_template("index.html")
 
-@app.route("/download/<filename>")
-def download_file(filename):
-    path = os.path.join(OUTPUT_FOLDER, filename)
-    if os.path.exists(path):
-        return send_file(path, as_attachment=True)
-    return "File not found!", 404
+# --- Health check route ---
+@app.route("/health")
+def health():
+    return {"status": "ok", "message": "EAP Flask app running successfully"}
+
+# --- Vercel entry point ---
+if __name__ != "__main__":
+    # For Vercel’s WSGI handler
+    app = app
+else:
+    # Local dev server
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
