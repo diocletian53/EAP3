@@ -1,50 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EAP Excel Processor</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Home Depot Excel Processor</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-orange-50 font-sans">
 
-<body>
-    <div class="container">
-        <h1>📦 EAP Excel Processor</h1>
-        <p>Upload your <strong>Blob_Blob.xlsx</strong> and <strong>master.xlsx</strong> files to generate the final output.</p>
+<div class="max-w-md mx-auto mt-16 bg-white rounded-2xl shadow-xl p-8 text-center">
+  <h1 class="text-3xl font-bold text-orange-600 mb-4">Home Depot Excel Processor</h1>
+  <p class="text-gray-700 mb-6">Upload your <strong>Northlake/Blob</strong> file and <strong>Master Excel</strong> to process.</p>
 
-        <!-- Upload Form -->
-        <form action="/" method="POST" enctype="multipart/form-data" id="uploadForm">
-            <input type="file" name="main_file" accept=".xlsx" required />
-            <input type="file" name="master_file" accept=".xlsx" required />
-
-            <button type="submit" id="processBtn">Process Files</button>
-        </form>
-
-        <!-- Status messages -->
-        {% if error %}
-            <p style="color: red; font-weight: 600; margin-top: 1rem;">{{ error }}</p>
-        {% endif %}
-
-        <p id="loadingText" style="display:none; margin-top: 1rem; color: #2563eb;">
-            ⏳ Processing your files, please wait...
-        </p>
-
-        <div class="footer">
-            <p>Created by <strong>diocletian53</strong> · EAP3 Project</p>
-        </div>
+  <!-- Upload Form -->
+  <form method="POST" enctype="multipart/form-data" class="space-y-4" id="uploadForm">
+    <div>
+      <label class="block text-left mb-1 font-medium text-orange-600">Blob_Blob/Northlake.xlsx</label>
+      <input type="file" name="main_file" accept=".xlsx" required
+             class="w-full p-3 border-2 border-dashed border-orange-400 rounded-lg bg-orange-100 hover:border-orange-500" />
     </div>
+    <div>
+      <label class="block text-left mb-1 font-medium text-orange-600">master.xlsx</label>
+      <input type="file" name="master_file" accept=".xlsx" required
+             class="w-full p-3 border-2 border-dashed border-orange-400 rounded-lg bg-orange-100 hover:border-orange-500" />
+    </div>
+    <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-semibold py-3 rounded-lg transition">
+      Process Files
+    </button>
+  </form>
 
-    <script>
-        const form = document.getElementById('uploadForm');
-        const loadingText = document.getElementById('loadingText');
-        const processBtn = document.getElementById('processBtn');
+  <!-- Error Message -->
+  {% if error %}
+  <div class="mt-4 p-4 bg-orange-100 border border-orange-300 rounded text-orange-700 font-medium">
+    ⚠️ {{ error }}
+  </div>
+  {% endif %}
 
-        form.addEventListener('submit', () => {
-            loadingText.style.display = 'block';
-            processBtn.disabled = true;
-            processBtn.textContent = 'Processing...';
-        });
-    </script>
+  <!-- Loading Feedback -->
+  <p id="loadingText" class="mt-4 text-orange-600 font-medium" style="display:none;">
+    ⏳ Processing your files, please wait...
+  </p>
+
+  <!-- Footer -->
+  <div class="mt-6 text-gray-500 text-sm">
+    Created by <strong>diocletian53</strong> · EAP3 Project
+  </div>
+</div>
+
+<script>
+const form = document.getElementById('uploadForm');
+const loadingText = document.getElementById('loadingText');
+
+form.addEventListener('submit', () => {
+    loadingText.style.display = 'block';
+});
+</script>
 </body>
 </html>
