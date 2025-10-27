@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Excel Processor</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body { font-family: 'Inter', sans-serif; background: #fff7ed; }
+.card { background: white; border-radius: 1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.1); padding: 2rem; max-width: 500px; margin: 3rem auto; text-align: center; }
+input[type="file"] { border: 2px dashed #fb923c; padding: 1rem; border-radius: 0.75rem; background: #ffedd5; }
+input[type="file"]:hover { border-color: #ea580c; }
+button { background-color: #f97316; color: white; font-weight: 600; padding: 0.75rem 1.5rem; border-radius: 0.75rem; transition: background 0.2s; }
+button:hover { background-color: #ea580c; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1 class="text-3xl font-bold text-orange-600 mb-4">Home Depot Excel Processor</h1>
+  <p class="text-gray-700 mb-4">Upload your Northlake/Blob file and Master Excel to process.</p>
+
+  <form method="POST" enctype="multipart/form-data" class="space-y-4">
+    <div>
+      <label class="block text-left mb-1 font-medium text-orange-600">Blob_Blob/Northlake.xlsx</label>
+      <input type="file" name="main_file" accept=".xlsx" required />
+    </div>
+    <div>
+      <label class="block text-left mb-1 font-medium text-orange-600">master.xlsx</label>
+      <input type="file" name="master_file" accept=".xlsx" required />
+    </div>
+    <button type="submit">Process Files</button>
+  </form>
+
+  {% if error %}
+  <div class="mt-4 p-4 bg-orange-100 border border-orange-300 rounded">
+    <p class="text-orange-700 font-medium">⚠️ {{ error }}</p>
+  </div>
+  {% endif %}
+
+  {% if download_file %}
+  <div class="mt-4 p-4 bg-blue-100 border border-blue-300 rounded">
+    <p class="text-blue-700 font-medium">
+      <a href="{{ url_for('download_file', filename=download_file) }}" class="underline">Download processed file locally</a>
+    </p>
+  </div>
+  {% endif %}
+
+  {% if github_message %}
+  <div class="mt-4 p-4 bg-green-100 border border-green-300 rounded">
+    <p class="text-green-700 font-medium">{{ github_message }}</p>
+    {% if github_url %}
+    <p class="mt-2">
+      <a href="{{ github_url }}" target="_blank" class="text-orange-600 font-semibold underline">
+        Download from GitHub
+      </a>
+    </p>
+    {% endif %}
+  </div>
+  {% endif %}
+
+</div>
+
+</body>
+</html>

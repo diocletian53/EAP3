@@ -1,0 +1,64 @@
+/* static/style.css */
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(180deg, #f3f4f6 0%, #e5e7eb 100%);
+  color: #111827;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.container {
+  background: white;
+  padding: 2rem 3rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  width: 420px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #2563eb;
+}
+
+p {
+  color: #4b5563;
+  margin-bottom: 2rem;
+}
+
+input[type="file"] {
+  margin: 1rem 0;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  width: 100%;
+  background: #f9fafb;
+}
+
+button {
+  background-color: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #1e40af;
+}
+
+.footer {
+  margin-top: 1.5rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
