@@ -1,8 +1,7 @@
-/* static/style.css */
-
+/* ---------- Global Styles ---------- */
 body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(180deg, #f3f4f6 0%, #e5e7eb 100%);
+  background: linear-gradient(180deg, #f9fafb 0%, #e5e7eb 100%);
   color: #111827;
   margin: 0;
   padding: 0;
@@ -12,53 +11,94 @@ body {
   height: 100vh;
 }
 
+/* ---------- Container Card ---------- */
 .container {
-  background: white;
-  padding: 2rem 3rem;
+  background: #ffffff;
+  padding: 2.5rem 3rem;
   border-radius: 1.5rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
   width: 420px;
   text-align: center;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
+.container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- Headings ---------- */
 h1 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
+  font-size: 1.9rem;
   color: #2563eb;
+  font-weight: 700;
+  margin-bottom: 1rem;
 }
 
 p {
   color: #4b5563;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
+/* ---------- File Input ---------- */
 input[type="file"] {
+  display: block;
   margin: 1rem 0;
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
+  padding: 0.6rem;
+  border: 2px dashed #2563eb;
+  border-radius: 10px;
   width: 100%;
   background: #f9fafb;
+  cursor: pointer;
+  transition: border 0.2s ease-in-out, background 0.2s;
 }
 
+input[type="file"]:hover {
+  border-color: #1d4ed8;
+  background: #eff6ff;
+}
+
+/* ---------- Button ---------- */
 button {
   background-color: #2563eb;
   color: white;
   border: none;
   border-radius: 10px;
-  padding: 0.75rem 1.5rem;
+  padding: 0.8rem 1.5rem;
   cursor: pointer;
   font-size: 1rem;
   font-weight: 600;
   transition: background 0.2s ease-in-out;
+  width: 100%;
 }
 
 button:hover {
   background-color: #1e40af;
 }
 
+/* ---------- Loading Text ---------- */
+#loadingText {
+  color: #2563eb;
+  font-weight: 500;
+  margin-top: 1rem;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.3; }
+  50% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+/* ---------- Footer ---------- */
 .footer {
   margin-top: 1.5rem;
   font-size: 0.85rem;
   color: #6b7280;
+}
+
+.footer strong {
+  color: #2563eb;
 }
