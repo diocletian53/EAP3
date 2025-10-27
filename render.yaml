@@ -1,6 +1,0 @@
-services:
-  - type: web
-    name: eap-flask-app
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --timeout 120 --workers 1
